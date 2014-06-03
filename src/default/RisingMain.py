@@ -29,7 +29,8 @@ axe = pygame.image.load("battle_axe2.png")
 axeRect = axe.get_rect()
 
 floor = pygame.image.load("rect_gray0.png")
-floorRect = floor.get_rect()
+#floorRects = [[floor.get_rect() for i in range(mapHeight)] for j in range(mapWidth)]
+# = floor.get_rect()
 
 while 1:
 	for event in pygame.event.get():
@@ -45,10 +46,21 @@ while 1:
 	screen.fill(black)
 	screen.blit(axe, axeRect)
 	
-	for x in range(0, mapWidth):
-		for y in range(0, mapHeight):
-			floorRect.move_ip(x*32, y*32)
-			screen.blit(floor, floorRect)
+	floorRects = []
+	
+	for x in range(0, mapWidth-1):
+		line = []
+		floorRects.append(line)
+		for y in range(0, mapHeight-1):
+			#print(x,y)
+			#floorRects[x][y].move_ip(x*32, y*32)
+			#screen.blit(floor, floorRects[x][y])
+			rect = (x*32, x*32, 32, 32)
+			line.append(floor.subsurface(rect))
+	
+	for x, row in enumerate(floorRects):
+		for y, tile in enumerate(row):
+			screen.blit(tile, (x*32, y*32))
 	
 	pygame.display.flip()
-
+	
