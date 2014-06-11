@@ -10,7 +10,7 @@ from pygame.locals import *
 tilesize = 32 #size of the square tile 
 windowWidth = 640
 windowHeight = 480
-speed = [2, 2]
+keys = [2, 2]
 speed2 = [1,1]
 
 pygame.init()
@@ -28,11 +28,11 @@ while 1:
 		if event.type == pygame.QUIT:
 			sys.exit()
 			
-	tilerect = tilerect.move(speed)
+	tilerect = tilerect.move(keys)
 	if tilerect.left < 0 or tilerect.right > windowWidth:
-		speed[0] = -speed[0]
+		keys[0] = -keys[0]
 	if tilerect.top < 0 or tilerect.bottom > windowHeight:
-		speed[1] = -speed[1]
+		keys[1] = -keys[1]
 		
 	tile2rect = tile2rect.move(speed2)
 	if tile2rect.left < 0 or tile2rect.right > windowWidth:
