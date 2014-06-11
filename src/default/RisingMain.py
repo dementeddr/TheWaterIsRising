@@ -4,15 +4,17 @@ Created on May 10, 2014
 @author: Scurvy
 '''
 
-import pygame, sys
+import os, sys
+import pygame
 from pygame.locals import *
 
+windowWidth = 640 * 2
+windowHeight = 480 * 2
 
-windowWidth = 640
-windowHeight = 480
-
-mapWidth = windowWidth // 32
-mapHeight = windowHeight // 32
+#mapWidth = windowWidth // 32
+#mapHeight = windowHeight // 32
+mapWidth = 24
+mapHeight = 20
 
 tilesize = 32
 
@@ -22,8 +24,8 @@ black = (0,0,0) #Tuple declaration
 print(mapWidth) 
 print(mapHeight)
 
-def create_map():
-	floor = pygame.image.load("rect_gray0.png")
+def create_map1():
+	floor = pygame.image.load("rect_gray0.png").convert()
 	map = []
 	for x in range(mapWidth):
 		line = []
@@ -34,16 +36,35 @@ def create_map():
 			
 	return map
 			
+			
+def create_map2():
+	floor1 = pygame.image.load("rect_gray0.png").convert()
+	floor2 = pygame.image.load("floor_vines0.png").convtert()
+	map = []
+	for x in range(mapWidth):
+		line = []
+		map.append(line)
+		for y in range(mapHeight):
+			if y == 0 or y == mapHeight-1 or x == 0 or x == mapWidth-1:
+				line.append(floor2.subsurface((0,0,tilesize,tilesize)))
+			else:
+				line.append(floor1.subsurface((0,0,tilesize,tilesize)))
+			
+	return map
+
 
 if __name__ == '__main__':
 
 	pygame.init()
 	print("Initializing")
-	print('Path to pygame module:', pygame.__file__)
 	
 	screen = pygame.display.set_mode((windowWidth, windowHeight))
-	map = create_map()
+	tile_map = create_map2()
+	map = pygame.Surface((mapWidth*tilesize, mapHeight*tilesize))
+	window_rect = pygame.Rect(0, 0, windowWidth, windowHeight)
+	viewport_rect = window_rect.copy()
 	
+	#THE ALMIGHTY GAME LOOP
 	while 1:
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
@@ -53,11 +74,12 @@ if __name__ == '__main__':
 						
 		for x in range(mapWidth):
 			for y in range(mapHeight):
-				tile = map[x][y]
-				#screen.blit(floor, tile)
-				screen.blit(tile, (x*tilesize, y*tilesize))
+				tile = tile_map[x][y]
+				map.blit(tile, (x*tilesize, y*tilesize))
 				
-		screen.display.flip() 
+		viewport = map.subsurface(viewport_rect)
+		screen.blit(viewport, window_rect)
+		pygame.display.flip() 
 				
 
 
