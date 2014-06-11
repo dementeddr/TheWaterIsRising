@@ -53,9 +53,7 @@ def create_map2():
 	return map
 
 
-def update(viewport_rect):	
-	speed = [0,0]
-	
+def event_update():
 	#Update events
 	for event in pygame.event.get():
 		if event.type == pygame.QUIT:
@@ -83,10 +81,14 @@ def update(viewport_rect):
 				keys[3] -= 1;
 			print("keyboard: ", keys[0], " ", keys[1])
 
-	#update viewport movement
+
+def update(viewport_rect):	
+	speed = [0,0]
+	event_update()
+	
+	#determine if there is movement
 	speed[0] = keys[0] + keys[1]
 	speed[1] = keys[2] + keys[3]
-	
 	if viewport_rect.left <= 0 and keys[0] < 0:
 		speed[0] = 0   
 	if viewport_rect.right >= mapWidth*tilesize and keys[1] > 0:
@@ -94,10 +96,10 @@ def update(viewport_rect):
 	if viewport_rect.top <= 0 and keys[2] < 0:
 		speed[1] = 0
 	if viewport_rect.bottom >= mapHeight*tilesize and keys[3] > 0:
-		speed[1] = 0   
-	
+		speed[1] = 0 
+		
+	#update viewport and return.
 	viewport_rect = viewport_rect.move(speed)
-
 	return viewport_rect
 
 
