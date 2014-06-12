@@ -6,53 +6,22 @@ Created on May 10, 2014
 
 import os, sys
 import pygame
+import default
+
+from default.TileMap1 import *
 from pygame.locals import *
 
 windowWidth = 640
 windowHeight = 480
 
 tilesize = 32
-
-#mapWidth = windowWidth // 32
-#mapHeight = windowHeight // 32
-mapWidth = 30
-mapHeight = 20
+scroll_buff = tilesize * 3
 
 keys = [0,0,0,0] #List/Array declaration
 black = (0,0,0) #Tuple declaration
 
-print(mapWidth) 
-print(mapHeight)
-
-def create_map1():
-	floor = pygame.image.load("rect_gray0.png").convert()
-	map = []
-	for x in range(mapWidth):
-		line = []
-		map.append(line)
-		for y in range(mapHeight):
-			#tile = pygame.Rect(x*tilesize, y*tilesize, tilesize, tilesize)
-			line.append(floor.subsurface((0,0,tilesize,tilesize)))
-			
-	return map
-			
-			
-def create_map2():
-	floor1 = pygame.image.load("rect_gray0.png").convert()
-	floor2 = pygame.image.load("floor_vines0.png").convert()
-	map = []
-	for x in range(mapWidth):
-		line = []
-		map.append(line)
-		for y in range(mapHeight):
-			if y == 0 or y == mapHeight-1 or x == 0 or x == mapWidth-1:
-				line.append(floor2.subsurface((0,0,tilesize,tilesize)))
-			else:
-				line.append(floor1.subsurface((0,0,tilesize,tilesize)))
-			
-	return map
-
-
+"""
+"""
 def event_update():
 	#Update events
 	for event in pygame.event.get():
@@ -82,50 +51,75 @@ def event_update():
 			print("keyboard: ", keys[0], " ", keys[1])
 
 
-def update(viewport_rect):	
-	speed = [0,0]
-	event_update()
-	
-	#determine if there is movement
-	speed[0] = keys[0] + keys[1]
-	speed[1] = keys[2] + keys[3]
-	if viewport_rect.left <= 0 and keys[0] < 0:
-		speed[0] = 0   
-	if viewport_rect.right >= mapWidth*tilesize and keys[1] > 0:
-		speed[0] = 0
-	if viewport_rect.top <= 0 and keys[2] < 0:
-		speed[1] = 0
-	if viewport_rect.bottom >= mapHeight*tilesize and keys[3] > 0:
-		speed[1] = 0 
-		
-	#update viewport and return.
-	viewport_rect = viewport_rect.move(speed)
-	return viewport_rect
-
-
+"""
+"""
 if __name__ == '__main__':
 	pygame.init()
 	print("Initializing")
 	
 	screen = pygame.display.set_mode((windowWidth, windowHeight))
+	map = TileMap1(tilesize, 30, 24)
 	
-	tile_map = create_map2()
 	window_rect = pygame.Rect(0, 0, windowWidth, windowHeight)
 	viewport_rect = window_rect.copy()
-	map = pygame.Surface((mapWidth*tilesize, mapHeight*tilesize))
+	background = pygame.Surface((map.mapWidth*tilesize, map.mapHeight*tilesize))
+	
+	player = pygame.image.load("human_m.png").convert()
+	player_rect = pygame.Rect(200, 200, tilesize, tilesize)
+
 	
 	#THE ALMIGHTY GAME LOOP
 	while 1:
-		viewport_rect = update(viewport_rect)
+		movement = [0,0]
+		player_move = [0,0]
+		view_move = [0,0]
+		event_update()
+
+		#determine if there is movement
+		movement[0] = keys[0] + keys[1]
+		movement[1] = keys[2] + keys[3]
+		
+		#moving left
+		if movement[0] < 0 and player_rect.left > 0:
+			if player_rect.left > scroll_buff or viewport_rect.left <= 0:
+				player_move[0] = -1
+			else:
+				view_move[0] = -1
+				
+		#moving right
+		if movement[0] > 0 and player_rect.right < map.drawWidth: 
+			if player_rect.right < map.drawWidth-scroll_buff or viewport_rect.right >= map.drawWidth:
+				player_move[0] = 1
+			else:
+				view_move[0] = 1
+			
+		#moving up
+		if movement[1] < 0 and player_rect.top > 0:
+			if player_rect.top > scroll_buff or viewport_rect.top <= 0:
+				player_move[1] = -1
+			else:
+				view_move[1] = -1
+				
+		#mvoing down
+		if movement[1] > 0 and player_rect.bottom < map.drawHeight: 
+			if player_rect.bottom < map.drawHeight-scroll_buff or viewport_rect.bottom >= map.drawHeight:
+				player_move[1] = 1
+			else:
+				view_move[1] = 1 
+		
+		#update viewport and return.
+		viewport_rect = viewport_rect.move(view_move)
+		player_rect = player_rect.move(player_move)
 
 		screen.fill(black)
-		for x in range(mapWidth):
-			for y in range(mapHeight):
-				tile = tile_map[x][y]
-				map.blit(tile, (x*tilesize, y*tilesize))
+		for x in range(map.mapWidth):
+			for y in range(map.mapHeight):
+				tile = map.map[x][y]
+				background.blit(tile, (x*tilesize, y*tilesize))
 				
-		viewport = map.subsurface(viewport_rect)
+		viewport = background.subsurface(viewport_rect)
 		screen.blit(viewport, window_rect)
+		screen.blit(player, player_rect)
 		pygame.display.flip() 
 				
 
