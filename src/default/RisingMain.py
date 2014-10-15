@@ -154,13 +154,13 @@ if __name__ == '__main__':
 		#print("Resize width: ", window_sized.width)
 		#print("Resize height: ", window_sized.height)
 
-		w_ratio = window_sized.width // window_rect.width
-		h_ratio = window_sized.height // window_rect.height
+		#w_ratio = window_sized.width // window_rect.width
+		#h_ratio = window_sized.height // window_rect.height
 		
-		bg_new_dim = (w_ratio*background.get_width(), h_ratio*background.get_height())
+		#bg_new_dim = (w_ratio*background.get_width(), h_ratio*background.get_height())
 		
-		bg_new = pygame.Surface(bg_new_dim)
-		pygame.transform.scale(background, (bg_new_dim), bg_new)
+		#bg_new = pygame.Surface(bg_new_dim)
+		#pygame.transform.scale(background, (bg_new_dim), bg_new)
 		
 		screen.fill(black)				
 		viewport = background.subsurface(view_rect)
