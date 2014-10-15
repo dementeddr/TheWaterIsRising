@@ -186,6 +186,8 @@ def movement_update():
 				view_move[1] = background.get_height() - view_rect.bottom
 			else:
 				view_move[1] = speed
+				
+	player_move = collision_detect(player_rect, player_move)
 		
 	#update viewport and player and return.
 	view_rect = view_rect.move(view_move)
@@ -194,12 +196,25 @@ def movement_update():
 
 """
 """	
-def collision_detect(ent_rect):
+def collision_detect(ent_rect, ent_move):
 	
-	ent_left = ent_rect.left // tilesize
+	ent_left = (ent_rect.left // tilesize) 
 	ent_right = math.ceil(ent_rect.right / tilesize)
 	ent_top = ent_rect.top // tilesize
 	ent_bottom = math.ceil(ent_rect.bottom / tilesize)
+	
+	if ent_move[0] < 0:
+		for i in range(2):
+			if (map.map[(ent_rect.left + ent_move[0]) // tilesize] [ent_top + i][1] == False):
+				ent_move[0] = (ent_left * tilesize) - ent_rect.left
+		
+	if ent_move[0] > 0:
+		for i in range(2):
+			if (map.map[(ent_rect.right + ent_move[0]) // tilesize] [ent_top + i][1] == False):
+				ent_move[0] = (ent_right * tilesize) - ent_rect.right
+				
+	return ent_move
+			
 	
 """
 """
