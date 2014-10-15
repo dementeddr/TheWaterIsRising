@@ -32,7 +32,7 @@ window_sized = window_rect.copy()
 background = pygame.Surface((map.mapWidth*tilesize, map.mapHeight*tilesize))
 
 player = pygame.image.load("human_m.png").convert()
-player_rect = pygame.Rect(200, 200, tilesize, tilesize) #Starting location
+player_rect = pygame.Rect(200, 100, tilesize, tilesize) #Starting location
 
 	
 """
@@ -181,7 +181,8 @@ if __name__ == '__main__':
 		screen.fill(black)				
 		viewport = background.subsurface(view_rect)
 		screen.blit(viewport, window_rect)
-		screen.blit(player, player_rect)
+		#screen.blit(player, player_rect)
+		screen.blit(player, pygame.Rect(player_rect.left - view_rect.left, player_rect.top - view_rect.top, tilesize, tilesize))
 		pygame.display.flip() 
 		
 		clock.tick(80)
