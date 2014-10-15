@@ -24,7 +24,7 @@ print("Initializing")
 
 screen = pygame.display.set_mode(windowSize, HWSURFACE|DOUBLEBUF|RESIZABLE)
 clock = pygame.time.Clock()
-map = TileMap1(tilesize, 60, 48)
+map = TileMap1(tilesize, 30, 24)
 
 window_rect = pygame.Rect(0, 0, windowSize[0], windowSize[1])
 view_rect = window_rect.copy()
@@ -32,7 +32,7 @@ window_sized = window_rect.copy()
 background = pygame.Surface((map.mapWidth*tilesize, map.mapHeight*tilesize))
 
 player = pygame.image.load("human_m.png").convert()
-player_rect = pygame.Rect(200, 100, tilesize, tilesize) #Starting location
+player_rect = pygame.Rect(200, 200, tilesize, tilesize) #Starting location
 
 	
 """
@@ -83,7 +83,7 @@ def movement_update():
 	movement = [0,0]
 	player_move = [0,0]
 	view_move = [0,0]
-	speed = 2
+	speed = 3
 	
 	#determine if there is movement
 	movement[0] = keys[0] + keys[1]
