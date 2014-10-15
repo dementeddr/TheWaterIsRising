@@ -139,7 +139,7 @@ def movement_update():
 			else:
 				player_move[0] = -speed
 		#move the viewport		
-		if (player_rect.left > scroll_buff and view_rect.left > 0):
+		if (player_rect.left < view_rect.left + scroll_buff and view_rect.left > 0):
 			if (view_rect.left < speed):
 				view_move[0] = -view_rect.left
 			else:
@@ -167,7 +167,7 @@ def movement_update():
 			else:
 				player_move[1] = -speed
 		#move the viewport		
-		if (player_rect.top > scroll_buff and view_rect.top > 0):
+		if (player_rect.top < view_rect.top + scroll_buff and view_rect.top > 0):
 			if (view_rect.top < speed):
 				view_move[1] = -view_rect.top
 			else:
@@ -198,7 +198,7 @@ if __name__ == '__main__':
 
 	for x in range(map.mapWidth):
 		for y in range(map.mapHeight):
-			tile = map.map[x][y]
+			tile = map.map[x][y][0]
 			background.blit(tile, (x*tilesize, y*tilesize))
 			
 	#bgx2 = pygame.Surface((map.drawWidth*2, map.drawHeight*2))

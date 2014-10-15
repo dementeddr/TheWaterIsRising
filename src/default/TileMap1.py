@@ -35,8 +35,8 @@ class TileMap1:
 			self.map.append(line)
 			for y in range(mapHeight):
 				if y == 0 or y == mapHeight-1 or x == 0 or x == mapWidth-1:
-					line.append(floor2.subsurface((0,0,tilesize,tilesize)))
+					line.append([floor2.subsurface((0,0,tilesize,tilesize)), False])
 				else:
-					line.append(floor1.subsurface((0,0,tilesize,tilesize)))
+					line.append([floor1.subsurface((0,0,tilesize,tilesize)), True])
 					
 		return
