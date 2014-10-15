@@ -203,16 +203,26 @@ def collision_detect(ent_rect, ent_move):
 	ent_top = ent_rect.top // tilesize
 	ent_bottom = math.ceil(ent_rect.bottom / tilesize)
 	
+	#Left side collision
 	if ent_move[0] < 0:
 		for i in range(2):
-			if (map.map[(ent_rect.left + ent_move[0]) // tilesize] [ent_top + i][1] == False):
+			if (map.map[(ent_rect.left + ent_move[0]) // tilesize] [ent_top + i] [1] == False):
 				ent_move[0] = (ent_left * tilesize) - ent_rect.left
-		
+	#Right side collision
 	if ent_move[0] > 0:
 		for i in range(2):
-			if (map.map[(ent_rect.right + ent_move[0]) // tilesize] [ent_top + i][1] == False):
+			if (map.map[(ent_rect.right + ent_move[0]) // tilesize] [ent_top + i] [1] == False):
 				ent_move[0] = (ent_right * tilesize) - ent_rect.right
-				
+	#Top side collision
+	if ent_move[1] < 0:
+		for i in range(2):
+			if (map.map[ent_left + i] [(ent_rect.top + ent_move[1]) // tilesize] [1] == False):
+				ent_move[1] = (ent_top * tilesize) - ent_rect.top
+	#Bottom side collision
+	if ent_move[1] > 0:
+		for i in range(2):
+			if (map.map[ent_left + i] [(ent_rect.bottom + ent_move[1]) // tilesize] [1] == False):
+				ent_move[1] = (ent_bottom * tilesize) - ent_rect.bottom
 	return ent_move
 			
 	
