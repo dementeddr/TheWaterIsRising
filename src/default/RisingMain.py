@@ -223,6 +223,7 @@ def collision_detect(ent_rect, ent_move):
 		for i in range(2):
 			if (map.map[ent_left + i] [(ent_rect.bottom + ent_move[1]) // tilesize] [1] == False):
 				ent_move[1] = (ent_bottom * tilesize) - ent_rect.bottom
+	
 	return ent_move
 			
 	
