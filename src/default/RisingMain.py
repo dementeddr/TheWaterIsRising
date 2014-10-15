@@ -4,7 +4,7 @@ Created on May 10, 2014
 @author: Scurvy
 '''
 
-import os, sys
+import os, sys, math
 import pygame
 import default
 
@@ -191,6 +191,15 @@ def movement_update():
 	view_rect = view_rect.move(view_move)
 	player_rect = player_rect.move(player_move)
 	
+
+"""
+"""	
+def collision_detect(ent_rect):
+	
+	ent_left = ent_rect.left // tilesize
+	ent_right = math.ceil(ent_rect.right / tilesize)
+	ent_top = ent_rect.top // tilesize
+	ent_bottom = math.ceil(ent_rect.bottom / tilesize)
 	
 """
 """
