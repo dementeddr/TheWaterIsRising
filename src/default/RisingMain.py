@@ -22,7 +22,7 @@ black = (0,0,0) #Tuple declaration
 pygame.init()
 print("Initializing")
 
-screen = pygame.display.set_mode(windowSize, HWSURFACE|DOUBLEBUF|RESIZABLE)
+screen = pygame.display.set_mode(windowSize, HWSURFACE|DOUBLEBUF) #|RESIZEABLE)
 clock = pygame.time.Clock()
 map = TileMap1(tilesize, 30, 24)
 
