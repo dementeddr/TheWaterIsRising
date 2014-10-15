@@ -89,7 +89,7 @@ def movement_update():
 	movement[0] = keys[0] + keys[1]
 	movement[1] = keys[2] + keys[3]
 	
-		
+	"""
 	#moving left
 	if movement[0] < 0:
 		if (player_rect.left > scroll_buff or player_rect.left <= scroll_buff
@@ -97,23 +97,8 @@ def movement_update():
 			
 			player_move[0] = -speed
 		elif view_rect.left > 0:
-			view_move[0] = -speed
-	
-	#moving right
-	if movement[0] > 0:
-		if (player_rect.right < background.get_width()):
-			if (background.get_width() - player_rect.right < speed):
-				player_move[0] = background.get_width() - player_rect.right
-			else:
-				player_move[0] = speed
-				
-		if (player_rect.right > view_rect.right - scroll_buff and view_rect.right < background.get_width()):
-			if (background.get_width() - view_rect.right < speed):
-				view_move[0] = background.get_width() - view_rect.right
-			else:
-				view_move[0] = speed
-			
-	"""		
+			view_move[0] = -speed		
+		
 	#moving right
 	if movement[0] > 0:
 		if (player_rect.right < view_rect.width - scroll_buff 
@@ -124,7 +109,7 @@ def movement_update():
 			player_move[0] = speed
 		elif view_rect.right < map.drawWidth:
 			view_move[0] = speed
-		"""		
+			
 	#moving up
 	if movement[1] < 0:
 		if (player_rect.top > scroll_buff or player_rect.top <= scroll_buff
@@ -144,6 +129,63 @@ def movement_update():
 			player_move[1] = speed
 		elif view_rect.bottom < map.drawHeight:
 			view_move[1] = speed
+	"""
+		
+	#moving left
+	if movement[0] < 0:
+		if (player_rect.left > 0):
+			if (player_rect.left < speed):
+				player_move[0] = -player_rect.left
+			else:
+				player_move[0] = -speed
+		#move the viewport		
+		if (player_rect.left > scroll_buff and view_rect.left > 0):
+			if (view_rect.left < speed):
+				view_move[0] = -view_rect.left
+			else:
+				view_move[0] = -speed
+		
+	#moving right
+	if movement[0] > 0:
+		if (player_rect.right < background.get_width()):
+			if (background.get_width() - player_rect.right < speed):
+				player_move[0] = background.get_width() - player_rect.right
+			else:
+				player_move[0] = speed
+		#move the viewport		
+		if (player_rect.right > view_rect.right - scroll_buff and view_rect.right < background.get_width()):
+			if (background.get_width() - view_rect.right < speed):
+				view_move[0] = background.get_width() - view_rect.right
+			else:
+				view_move[0] = speed	
+				
+	#moving up
+	if movement[1] < 0:
+		if (player_rect.top > 0):
+			if (player_rect.top < speed):
+				player_move[1] = -player_rect.top
+			else:
+				player_move[1] = -speed
+		#move the viewport		
+		if (player_rect.top > scroll_buff and view_rect.top > 0):
+			if (view_rect.top < speed):
+				view_move[1] = -view_rect.top
+			else:
+				view_move[1] = -speed
+		
+	#moving right
+	if movement[1] > 0:
+		if (player_rect.bottom < background.get_height()):
+			if (background.get_height() - player_rect.bottom < speed):
+				player_move[1] = background.get_height() - player_rect.bottom
+			else:
+				player_move[1] = speed
+		#move the viewport		
+		if (player_rect.bottom > view_rect.bottom - scroll_buff and view_rect.bottom < background.get_height()):
+			if (background.get_height() - view_rect.bottom < speed):
+				view_move[1] = background.get_height() - view_rect.bottom
+			else:
+				view_move[1] = speed
 		
 	#update viewport and player and return.
 	view_rect = view_rect.move(view_move)
