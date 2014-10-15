@@ -88,6 +88,7 @@ def movement_update():
 	#determine if there is movement
 	movement[0] = keys[0] + keys[1]
 	movement[1] = keys[2] + keys[3]
+	
 		
 	#moving left
 	if movement[0] < 0:
@@ -97,7 +98,22 @@ def movement_update():
 			player_move[0] = -speed
 		elif view_rect.left > 0:
 			view_move[0] = -speed
+	
+	#moving right
+	if movement[0] > 0:
+		if (player_rect.right < background.get_width()):
+			if (background.get_width() - player_rect.right < speed):
+				player_move[0] = background.get_width() - player_rect.right
+			else:
+				player_move[0] = speed
+				
+		if (player_rect.right > view_rect.right - scroll_buff and view_rect.right < background.get_width()):
+			if (background.get_width() - view_rect.right < speed):
+				view_move[0] = background.get_width() - view_rect.right
+			else:
+				view_move[0] = speed
 			
+	"""		
 	#moving right
 	if movement[0] > 0:
 		if (player_rect.right < view_rect.width - scroll_buff 
@@ -108,7 +124,7 @@ def movement_update():
 			player_move[0] = speed
 		elif view_rect.right < map.drawWidth:
 			view_move[0] = speed
-				
+		"""		
 	#moving up
 	if movement[1] < 0:
 		if (player_rect.top > scroll_buff or player_rect.top <= scroll_buff
