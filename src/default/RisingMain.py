@@ -15,6 +15,7 @@ windowSize = (640, 480)
 tilesize = 32
 scroll_buff = tilesize * 5
 on_ground = False
+speed = 3
 
 keys = [0,0,0,0] #List/Array declaration
 black = (0,0,0) #Tuple declaration
@@ -79,11 +80,11 @@ def movement_update():
 	global player_rect
 	global view_rect
 	global scroll_buff
+	global speed
 	
 	movement = [0,0]
 	player_move = [0,0]
 	view_move = [0,0]
-	speed = 3
 	
 	#determine if there is movement
 	movement[0] = keys[1] - keys[0]
@@ -166,28 +167,28 @@ def collision_detect(ent_rect, ent_move):
 		for i in range(1 if ent_rect.top % tilesize == 0 else 2):
 			if (map.map[(ent_rect.left + ent_move[0]) // tilesize] [ent_top + i] [1] == False):
 				ent_move[0] = (ent_left * tilesize) - ent_rect.left
-				if (ent_move[0] < -3): ent_move[0] = -3
+				if (ent_move[0] < -speed): ent_move[0] = -speed
 				
 	#Right side collision
 	if ent_move[0] > 0:
 		for i in range(1 if ent_rect.top % tilesize == 0 else 2):
 			if (map.map[(ent_rect.right + ent_move[0] -1) // tilesize] [ent_top + i] [1] == False):
 				ent_move[0] = (ent_right * tilesize) - ent_rect.right
-				if (ent_move[0] > 3): ent_move[0] = 3
+				if (ent_move[0] > speed): ent_move[0] = speed
 				
 	#Top side collision
 	if ent_move[1] < 0:
 		for i in range(1 if ent_rect.left % tilesize == 0 else 2):
 			if (map.map[ent_left + i] [(ent_rect.top + ent_move[1]) // tilesize] [1] == False):
 				ent_move[1] = (ent_top * tilesize) - ent_rect.top
-				if (ent_move[1] < -3): ent_move[1] = -3
+				if (ent_move[1] < -speed): ent_move[1] = -speed
 				
 	#Bottom side collision
 	if ent_move[1] > 0:
 		for i in range(1 if ent_rect.left % tilesize == 0 else 2):
 			if (map.map[ent_left + i] [(ent_rect.bottom + ent_move[1] -1) // tilesize] [1] == False):
 				ent_move[1] = (ent_bottom * tilesize) - ent_rect.bottom
-				if (ent_move[1] > 3): ent_move[1] = 3
+				if (ent_move[1] > speed): ent_move[1] = speed
 	
 	return ent_move
 			
