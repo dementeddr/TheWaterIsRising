@@ -13,7 +13,8 @@ from pygame.locals import *
 windowSize = (640, 480)
 
 tilesize = 32
-scroll_buff = tilesize * 3
+scroll_buff = tilesize * 5
+on_ground = False
 
 keys = [0,0,0,0] #List/Array declaration
 black = (0,0,0) #Tuple declaration
@@ -53,13 +54,13 @@ def event_update():
 		#update keyboard presses
 		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_LEFT:
-				keys[0] -= 1;
+				keys[0] = 1;
 			elif event.key == pygame.K_RIGHT:
-				keys[1] += 1;
+				keys[1] = 1;
 			elif event.key == pygame.K_UP:
-				keys[2] -= 1;
+				keys[2] = 1;
 			elif event.key == pygame.K_DOWN:
-				keys[3] += 1;
+				keys[3] = 1;
 		#update keyboard releases
 		elif event.type == pygame.KEYUP:
 			if event.key == pygame.K_LEFT:
@@ -85,50 +86,8 @@ def movement_update():
 	speed = 3
 	
 	#determine if there is movement
-	movement[0] = keys[0] + keys[1]
-	movement[1] = keys[2] + keys[3]
-	
-	"""
-	#moving left
-	if movement[0] < 0:
-		if (player_rect.left > scroll_buff or player_rect.left <= scroll_buff
-			and view_rect.left <= 0 and player_rect.left > 0):
-			
-			player_move[0] = -speed
-		elif view_rect.left > 0:
-			view_move[0] = -speed		
-		
-	#moving right
-	if movement[0] > 0:
-		if (player_rect.right < view_rect.width - scroll_buff 
-			or player_rect.right >= view_rect.width - scroll_buff 
-			and view_rect.right >= map.drawWidth 
-			and player_rect.right < view_rect.width):
-			
-			player_move[0] = speed
-		elif view_rect.right < map.drawWidth:
-			view_move[0] = speed
-			
-	#moving up
-	if movement[1] < 0:
-		if (player_rect.top > scroll_buff or player_rect.top <= scroll_buff
-			and view_rect.top <= 0 and player_rect.top > 0):
-				
-			player_move[1] = -speed
-		elif view_rect.top > 0:
-			view_move[1] = -speed
-				
-	#moving down
-	if movement[1] > 0:
-		if (player_rect.bottom < view_rect.height - scroll_buff 
-			or player_rect.bottom >= view_rect.height - scroll_buff 
-			and view_rect.bottom >= map.drawHeight 
-			and player_rect.bottom < view_rect.height):
-			
-			player_move[1] = speed
-		elif view_rect.bottom < map.drawHeight:
-			view_move[1] = speed
-	"""
+	movement[0] = keys[1] - keys[0]
+	movement[1] = keys[3] - keys[2]
 		
 	#moving left
 	if movement[0] < 0:
