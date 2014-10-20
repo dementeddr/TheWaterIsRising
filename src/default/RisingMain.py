@@ -6,9 +6,8 @@ Created on May 10, 2014
 
 import os, sys, math
 import pygame
-import default
 
-from default.TileMap1 import *
+from TileMap1 import *
 from pygame.locals import *
 
 windowSize = (640, 480)
