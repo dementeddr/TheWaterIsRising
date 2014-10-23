@@ -117,7 +117,7 @@ def movement_update():
 	else:
 		player_move[0] = 0
 		
-	player_move = collision_detect(player_rect, player_move)
+	player_move = collision_detect(player_rect, player_move, on_ground)
 
 		
 	#moving left
@@ -186,7 +186,7 @@ def movement_update():
 
 """
 """	
-def collision_detect(ent_rect, ent_move):
+def collision_detect(ent_rect, ent_move, on_ground):
 	
 	ent_left = (ent_rect.left // tilesize) 
 	ent_right = math.ceil(ent_rect.right / tilesize)
@@ -220,7 +220,9 @@ def collision_detect(ent_rect, ent_move):
 		for i in range(1 if ent_rect.left % tilesize == 0 else 2):
 			if (map.map[ent_left + i] [(ent_rect.bottom + ent_move[1] -1) // tilesize] [1] == False):
 				diff = (ent_bottom * tilesize) - ent_rect.bottom
-				if (ent_move[1] > diff): ent_move[1] = diff
+				if (ent_move[1] >= diff): 
+					ent_move[1] = diff
+					on_ground = True
 	
 	return ent_move
 			
