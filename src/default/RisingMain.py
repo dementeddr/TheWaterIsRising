@@ -101,11 +101,12 @@ def movement_update():
 		if keys[2] == 1:
 			player_move[1] = -jump_speed
 			movement[1] = -1
+			on_ground = False
 		else:
 			player_move[1] = 1 
 			movement[1] = 1
 	# if on the ground, player should try to move down
-	elif on_ground == False:
+	else:
 		movement[1] = player_move[1]
 		if frame_number % 6 == 0:
 			player_move[1] += 1 #accelerate towards ground
