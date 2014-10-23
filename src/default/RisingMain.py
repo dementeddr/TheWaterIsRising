@@ -88,6 +88,7 @@ def movement_update():
 	global view_rect
 	global scroll_buff
 	global speed
+	global jump_speed
 	global on_ground
 	global player_move
 	global frame_number
@@ -98,7 +99,7 @@ def movement_update():
 	#determine if there is movement
 	movement[0] = keys[1] - keys[0]
 	if on_ground == True: 
-		if keys[2] == 1:
+		if keys[2] == 1 and keys[3] == 0:
 			player_move[1] = -jump_speed
 			movement[1] = -1
 			on_ground = False
@@ -111,16 +112,10 @@ def movement_update():
 		if frame_number % 6 == 0:
 			player_move[1] += 1 #accelerate towards ground
 			
-	if movement[0] > 0:
-		player_move[0] = speed
-	elif movement[0] < 0:
-		player_move[0] = -speed
-	else:
-		player_move[0] = 0
+	player_move[0] = movement[0] * speed
 		
-	player_move = collision_detect(player_rect, player_move, on_ground)
+	player_move = collision_detect(player_rect, player_move)
 
-		
 	#moving left
 	if movement[0] < 0:
 		if (player_rect.left > 0):
@@ -187,7 +182,9 @@ def movement_update():
 
 """
 """	
-def collision_detect(ent_rect, ent_move, on_ground):
+def collision_detect(ent_rect, ent_move):
+	
+	global on_ground #This is bad and I should feel bad. Need to work around python's pass-by-name.
 	
 	ent_left = (ent_rect.left // tilesize) 
 	ent_right = math.ceil(ent_rect.right / tilesize)
