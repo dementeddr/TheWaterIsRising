@@ -109,34 +109,44 @@ def movement_update():
 		movement[1] = player_move[1]
 		if frame_number % 6 == 0:
 			player_move[1] += 1 #accelerate towards ground
+			
+	if movement[0] > 0:
+		player_move[0] = speed
+	elif movement[0] < 0:
+		player_move[0] = -speed
+	else:
+		player_move[0] = 0
+		
+	player_move = collision_detect(player_rect, player_move)
+
 		
 	#moving left
 	if movement[0] < 0:
 		if (player_rect.left > 0):
-			if (player_rect.left < speed):
+			if (player_rect.left < -player_move[0]):
 				player_move[0] = -player_rect.left
-			else:
-				player_move[0] = -speed
+			#else:
+				#player_move[0] = -speed
 		#move the viewport		
 		if (player_rect.left < view_rect.left + scroll_buff and view_rect.left > 0):
-			if (view_rect.left < speed):
+			if (view_rect.left < -player_move[0]):
 				view_move[0] = -view_rect.left
 			else:
-				view_move[0] = -speed
+				view_move[0] = player_move[0]
 		
 	#moving right
 	if movement[0] > 0:
 		if (player_rect.right < background.get_width()):
-			if (background.get_width() - player_rect.right < speed):
+			if (background.get_width() - player_rect.right < player_move[0]):
 				player_move[0] = background.get_width() - player_rect.right
-			else:
-				player_move[0] = speed
+			#else:
+				#player_move[0] = speed
 		#move the viewport		
 		if (player_rect.right > view_rect.right - scroll_buff and view_rect.right < background.get_width()):
-			if (background.get_width() - view_rect.right < speed):
+			if (background.get_width() - view_rect.right < player_move[0]):
 				view_move[0] = background.get_width() - view_rect.right
 			else:
-				view_move[0] = speed	
+				view_move[0] = player_move[0]
 				
 	#moving up
 	if movement[1] < 0:
@@ -148,10 +158,10 @@ def movement_update():
 
 		#move the viewport		
 		if (player_rect.top < view_rect.top + scroll_buff and view_rect.top > 0):
-			if (view_rect.top < speed):
+			if (view_rect.top < -player_move[1]):
 				view_move[1] = -view_rect.top
 			else:
-				view_move[1] = -speed
+				view_move[1] = player_move[1]
 		
 	#moving down
 	if movement[1] > 0:
@@ -164,13 +174,11 @@ def movement_update():
 				#player_move[1] = speed
 		#move the viewport		
 		if (player_rect.bottom > view_rect.bottom - scroll_buff and view_rect.bottom < background.get_height()):
-			if (background.get_height() - view_rect.bottom < speed):
+			if (background.get_height() - view_rect.bottom < player_move[1]):
 				view_move[1] = background.get_height() - view_rect.bottom
 			else:
-				view_move[1] = speed
-				
-	player_move = collision_detect(player_rect, player_move)
-		
+				view_move[1] = player_move[1]
+						
 	#update viewport and player and return.
 	view_rect = view_rect.move(view_move)
 	player_rect = player_rect.move(player_move)
