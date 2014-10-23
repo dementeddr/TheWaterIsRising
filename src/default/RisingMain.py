@@ -102,7 +102,7 @@ def movement_update():
 		if keys[2] == 1 and keys[3] == 0:
 			player_move[1] = -jump_speed
 			movement[1] = -1
-			on_ground = False
+			#on_ground = False
 		else:
 			player_move[1] = 1 
 			movement[1] = 1
@@ -164,7 +164,7 @@ def movement_update():
 		if (player_rect.bottom < background.get_height()):
 			if (background.get_height() - player_rect.bottom < speed):
 				player_move[1] = background.get_height() - player_rect.bottom
-				on_ground = True
+				#on_ground = True
 
 			#else:
 				#player_move[1] = speed
@@ -174,6 +174,11 @@ def movement_update():
 				view_move[1] = background.get_height() - view_rect.bottom
 			else:
 				view_move[1] = player_move[1]
+				
+	if player_move[1] == 0:
+		on_ground = True
+	else:
+		on_ground = False
 						
 	#update viewport and player and return.
 	view_rect = view_rect.move(view_move)
@@ -184,7 +189,7 @@ def movement_update():
 """	
 def collision_detect(ent_rect, ent_move):
 	
-	global on_ground #This is bad and I should feel bad. Need to work around python's pass-by-name.
+	#global on_ground #This is bad and I should feel bad. Need to work around python's pass-by-name.
 	
 	ent_left = (ent_rect.left // tilesize) 
 	ent_right = math.ceil(ent_rect.right / tilesize)
@@ -220,7 +225,7 @@ def collision_detect(ent_rect, ent_move):
 				diff = (ent_bottom * tilesize) - ent_rect.bottom
 				if (ent_move[1] >= diff): 
 					ent_move[1] = diff
-					on_ground = True
+					#on_ground = True
 	
 	return ent_move
 			
