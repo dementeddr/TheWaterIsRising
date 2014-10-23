@@ -92,8 +92,11 @@ def movement_update():
 	
 	#determine if there is movement
 	movement[0] = keys[1] - keys[0]
-	if keys[3] != 1 and on_ground == True: 
+	if on_ground == True and keys[2] == 1:
+		player_move[1] = jump_speed
 		movement[1] = -1
+	elif on_ground == False:
+		movement[1] = player_move[1]
 		
 	#moving left
 	if movement[0] < 0:
