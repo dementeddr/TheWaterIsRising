@@ -16,6 +16,7 @@ tilesize = 32
 scroll_buff = tilesize * 5
 on_ground = False
 speed = 3
+jump_speed = 8
 
 keys = [0,0,0,0] #List/Array declaration
 black = (0,0,0) #Tuple declaration
@@ -34,6 +35,7 @@ background = pygame.Surface((map.mapWidth*tilesize, map.mapHeight*tilesize))
 
 player = pygame.image.load("human_m.png").convert()
 player_rect = pygame.Rect(200, 100, tilesize, tilesize) #Starting location
+player_move = [0,0]
 
 	
 """
@@ -81,14 +83,17 @@ def movement_update():
 	global view_rect
 	global scroll_buff
 	global speed
+	global on_ground
+	global player_move
 	
-	movement = [0,0]
-	player_move = [0,0]
+	player_move[0] = 0
 	view_move = [0,0]
+	movement = [0,0]
 	
 	#determine if there is movement
 	movement[0] = keys[1] - keys[0]
-	movement[1] = keys[3] - keys[2]
+	if keys[3] != 1 and on_ground == True: 
+		movement[1] = -1
 		
 	#moving left
 	if movement[0] < 0:
@@ -132,13 +137,14 @@ def movement_update():
 			else:
 				view_move[1] = -speed
 		
-	#moving right
+	#moving down
 	if movement[1] > 0:
 		if (player_rect.bottom < background.get_height()):
 			if (background.get_height() - player_rect.bottom < speed):
 				player_move[1] = background.get_height() - player_rect.bottom
 			else:
 				player_move[1] = speed
+			on_ground = True
 		#move the viewport		
 		if (player_rect.bottom > view_rect.bottom - scroll_buff and view_rect.bottom < background.get_height()):
 			if (background.get_height() - view_rect.bottom < speed):
