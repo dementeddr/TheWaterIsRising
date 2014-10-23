@@ -93,10 +93,11 @@ def movement_update():
 	#determine if there is movement
 	movement[0] = keys[1] - keys[0]
 	if on_ground == True and keys[2] == 1:
-		player_move[1] = jump_speed
+		player_move[1] = -jump_speed
 		movement[1] = -1
 	elif on_ground == False:
 		movement[1] = player_move[1]
+		player_move[1] += 1 #accelerate towards ground
 		
 	#moving left
 	if movement[0] < 0:
@@ -129,16 +130,17 @@ def movement_update():
 	#moving up
 	if movement[1] < 0:
 		if (player_rect.top > 0):
-			if (player_rect.top < speed):
+			if (player_rect.top < player_move[1]):
 				player_move[1] = -player_rect.top
-			else:
-				player_move[1] = -speed
+			#else:
+				#player_move += 1 
+
 		#move the viewport		
 		if (player_rect.top < view_rect.top + scroll_buff and view_rect.top > 0):
 			if (view_rect.top < speed):
 				view_move[1] = -view_rect.top
-			else:
-				view_move[1] = -speed
+			#else:
+				#view_move[1] = -speed
 		
 	#moving down
 	if movement[1] > 0:
@@ -170,34 +172,35 @@ def collision_detect(ent_rect, ent_move):
 	ent_right = math.ceil(ent_rect.right / tilesize)
 	ent_top = (ent_rect.top // tilesize)
 	ent_bottom = math.ceil(ent_rect.bottom / tilesize)
+	diff = 0
 	
 	#Left side collision
 	if ent_move[0] < 0:
 		for i in range(1 if ent_rect.top % tilesize == 0 else 2):
 			if (map.map[(ent_rect.left + ent_move[0]) // tilesize] [ent_top + i] [1] == False):
-				ent_move[0] = (ent_left * tilesize) - ent_rect.left
-				if (ent_move[0] < -speed): ent_move[0] = -speed
+				diff = (ent_left * tilesize) - ent_rect.left
+				if (ent_move[0] < diff): ent_move[0] = diff
 				
 	#Right side collision
 	if ent_move[0] > 0:
 		for i in range(1 if ent_rect.top % tilesize == 0 else 2):
 			if (map.map[(ent_rect.right + ent_move[0] -1) // tilesize] [ent_top + i] [1] == False):
-				ent_move[0] = (ent_right * tilesize) - ent_rect.right
-				if (ent_move[0] > speed): ent_move[0] = speed
+				diff = (ent_right * tilesize) - ent_rect.right
+				if (ent_move[0] > diff): ent_move[0] = diff
 				
 	#Top side collision
 	if ent_move[1] < 0:
 		for i in range(1 if ent_rect.left % tilesize == 0 else 2):
 			if (map.map[ent_left + i] [(ent_rect.top + ent_move[1]) // tilesize] [1] == False):
-				ent_move[1] = (ent_top * tilesize) - ent_rect.top
-				if (ent_move[1] < -speed): ent_move[1] = -speed
+				diff = (ent_top * tilesize) - ent_rect.top
+				if (ent_move[1] < diff): ent_move[1] = diff
 				
 	#Bottom side collision
 	if ent_move[1] > 0:
 		for i in range(1 if ent_rect.left % tilesize == 0 else 2):
 			if (map.map[ent_left + i] [(ent_rect.bottom + ent_move[1] -1) // tilesize] [1] == False):
-				ent_move[1] = (ent_bottom * tilesize) - ent_rect.bottom
-				if (ent_move[1] > speed): ent_move[1] = speed
+				diff = (ent_bottom * tilesize) - ent_rect.bottom
+				if (ent_move[1] > diff): ent_move[1] = diff
 	
 	return ent_move
 			
