@@ -92,9 +92,14 @@ def movement_update():
 	
 	#determine if there is movement
 	movement[0] = keys[1] - keys[0]
-	if on_ground == True and keys[2] == 1:
-		player_move[1] = -jump_speed
-		movement[1] = -1
+	if on_ground == True: 
+		if keys[2] == 1:
+			player_move[1] = -jump_speed
+			movement[1] = -1
+		else:
+			player_move[1] = 1 
+			movement[1] = 1
+		
 	elif on_ground == False:
 		movement[1] = player_move[1]
 		player_move[1] += 1 #accelerate towards ground
@@ -139,17 +144,17 @@ def movement_update():
 		if (player_rect.top < view_rect.top + scroll_buff and view_rect.top > 0):
 			if (view_rect.top < speed):
 				view_move[1] = -view_rect.top
-			#else:
-				#view_move[1] = -speed
+			else:
+				view_move[1] = -speed
 		
 	#moving down
 	if movement[1] > 0:
 		if (player_rect.bottom < background.get_height()):
+			on_ground = True
 			if (background.get_height() - player_rect.bottom < speed):
 				player_move[1] = background.get_height() - player_rect.bottom
-			else:
-				player_move[1] = speed
-			on_ground = True
+			#else:
+				#player_move[1] = speed
 		#move the viewport		
 		if (player_rect.bottom > view_rect.bottom - scroll_buff and view_rect.bottom < background.get_height()):
 			if (background.get_height() - view_rect.bottom < speed):
