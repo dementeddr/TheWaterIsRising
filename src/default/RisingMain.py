@@ -37,13 +37,16 @@ player = pygame.image.load("human_m.png").convert()
 player_rect = pygame.Rect(200, 100, tilesize, tilesize) #Starting location
 player_move = [0,0]
 
-	
+frame_number = 0
+
+
 """
 """
 def event_update():
 	global keys
 	global screen
 	global window_sized
+	global frame_number
 	
 	#Update events
 	for event in pygame.event.get():
@@ -74,6 +77,8 @@ def event_update():
 				keys[2] = 0;
 			elif event.key == pygame.K_DOWN:
 				keys[3] = 0;
+				
+	frame_number += 1
 			
 			
 """
@@ -85,8 +90,8 @@ def movement_update():
 	global speed
 	global on_ground
 	global player_move
+	global frame_number
 	
-	player_move[0] = 0
 	view_move = [0,0]
 	movement = [0,0]
 	
@@ -99,10 +104,11 @@ def movement_update():
 		else:
 			player_move[1] = 1 
 			movement[1] = 1
-		
+	# if on the ground, player should try to move down
 	elif on_ground == False:
 		movement[1] = player_move[1]
-		player_move[1] += 1 #accelerate towards ground
+		if frame_number % 6 == 0:
+			player_move[1] += 1 #accelerate towards ground
 		
 	#moving left
 	if movement[0] < 0:
@@ -150,9 +156,10 @@ def movement_update():
 	#moving down
 	if movement[1] > 0:
 		if (player_rect.bottom < background.get_height()):
-			on_ground = True
 			if (background.get_height() - player_rect.bottom < speed):
 				player_move[1] = background.get_height() - player_rect.bottom
+				on_ground = True
+
 			#else:
 				#player_move[1] = speed
 		#move the viewport		
