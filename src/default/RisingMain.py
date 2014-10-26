@@ -8,6 +8,7 @@ import os, sys, math
 import pygame
 
 from TileMap1 import *
+from TileMap2 import *
 from pygame.locals import *
 
 windowSize = (640, 480)
@@ -28,7 +29,7 @@ print("Initializing")
 
 screen = pygame.display.set_mode(windowSize, HWSURFACE|DOUBLEBUF) #|RESIZEABLE)
 clock = pygame.time.Clock()
-map = TileMap1(tilesize, 30, 24)
+map = TileMap2(tilesize, 30, 24)
 
 window_rect = pygame.Rect(0, 0, windowSize[0], windowSize[1])
 view_rect = window_rect.copy()
