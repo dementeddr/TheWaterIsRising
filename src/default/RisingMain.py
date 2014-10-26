@@ -261,7 +261,8 @@ if __name__ == '__main__':
 		screen.fill(black)				
 		viewport = background.subsurface(view_rect)
 		screen.blit(viewport, window_rect)
-		#screen.blit(player, player_rect)
+		
+		#Here we draw the player to the screen, using fancy math.
 		screen.blit(player, pygame.Rect(player_rect.left - view_rect.left, player_rect.top - view_rect.top, tilesize, tilesize))
 		pygame.display.flip() 
 		
