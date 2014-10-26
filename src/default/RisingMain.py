@@ -17,6 +17,8 @@ scroll_buff = tilesize * 5
 on_ground = False
 speed = 3
 jump_speed = 8
+jump_delay = 3
+fall_inertia = 6
 
 keys = [0,0,0,0] #List/Array declaration
 black = (0,0,0) #Tuple declaration
@@ -38,6 +40,7 @@ player_rect = pygame.Rect(200, 100, tilesize, tilesize) #Starting location
 player_move = [0,0]
 
 frame_number = 0
+time_grounded = 0
 
 
 """
@@ -92,6 +95,7 @@ def movement_update():
 	global on_ground
 	global player_move
 	global frame_number
+	global time_grounded
 	
 	view_move = [0,0]
 	movement = [0,0]
@@ -99,18 +103,20 @@ def movement_update():
 	#determine if there is movement
 	movement[0] = keys[1] - keys[0]
 	if on_ground == True: 
-		if keys[2] == 1 and keys[3] == 0:
+		time_grounded += 1
+		if keys[2] == 1 and keys[3] == 0 and time_grounded >= jump_delay:
 			player_move[1] = -jump_speed
 			movement[1] = -1
-			#on_ground = False
-		else:
+			
+		else: # if on the ground, player should try to move down
 			player_move[1] = 1 
 			movement[1] = 1
-	# if on the ground, player should try to move down
-	else:
-		movement[1] = player_move[1]
-		if frame_number % 6 == 0:
-			player_move[1] += 1 #accelerate towards ground
+	
+	else: #if in the air, accelerate down.
+		movement[1] = player_move[1] #Only the charge of movement matters, not the voltage.
+		time_grounded = 0 
+		if frame_number % fall_inertia == 0:
+			player_move[1] += 1 #accelerate towards ground at rate of 1/6th of a pixel per frame^2
 			
 	player_move[0] = movement[0] * speed
 		
@@ -121,8 +127,7 @@ def movement_update():
 		if (player_rect.left > 0):
 			if (player_rect.left < -player_move[0]):
 				player_move[0] = -player_rect.left
-			#else:
-				#player_move[0] = -speed
+			
 		#move the viewport		
 		if (player_rect.left < view_rect.left + scroll_buff and view_rect.left > 0):
 			if (view_rect.left < -player_move[0]):
@@ -135,8 +140,7 @@ def movement_update():
 		if (player_rect.right < background.get_width()):
 			if (background.get_width() - player_rect.right < player_move[0]):
 				player_move[0] = background.get_width() - player_rect.right
-			#else:
-				#player_move[0] = speed
+			
 		#move the viewport		
 		if (player_rect.right > view_rect.right - scroll_buff and view_rect.right < background.get_width()):
 			if (background.get_width() - view_rect.right < player_move[0]):
@@ -149,8 +153,6 @@ def movement_update():
 		if (player_rect.top > 0):
 			if (player_rect.top < player_move[1]):
 				player_move[1] = -player_rect.top
-			#else:
-				#player_move += 1 
 
 		#move the viewport		
 		if (player_rect.top < view_rect.top + scroll_buff and view_rect.top > 0):
@@ -164,10 +166,7 @@ def movement_update():
 		if (player_rect.bottom < background.get_height()):
 			if (background.get_height() - player_rect.bottom < speed):
 				player_move[1] = background.get_height() - player_rect.bottom
-				#on_ground = True
-
-			#else:
-				#player_move[1] = speed
+				
 		#move the viewport		
 		if (player_rect.bottom > view_rect.bottom - scroll_buff and view_rect.bottom < background.get_height()):
 			if (background.get_height() - view_rect.bottom < player_move[1]):
