@@ -9,13 +9,14 @@ import pygame
 from pygame.locals import *
 import Entity
 
-class Player from Entity:
+class Player(Entity):
 	
 	def __init__(self):
-		
+		Entity.__init__(self)
+	
 	"""
 	"""
-	def movement_update(self):
+	def movement_update(self, world):
 		global player_rect
 		global view_rect
 		global scroll_buff
