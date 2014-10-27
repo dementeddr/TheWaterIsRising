@@ -16,7 +16,8 @@ windowSize = (640, 480)
 tilesize = 32
 scroll_buff = tilesize * 5
 on_ground = False
-speed = 3
+ground_speed = 3
+air_speed = 2
 jump_speed = 8
 jump_delay = 3
 fall_inertia = 6
@@ -29,7 +30,7 @@ print("Initializing")
 
 screen = pygame.display.set_mode(windowSize, HWSURFACE|DOUBLEBUF) #|RESIZEABLE)
 clock = pygame.time.Clock()
-map = TileMap2(tilesize, 30, 24)
+map = TileMap1(tilesize, 30, 24)
 
 window_rect = pygame.Rect(0, 0, windowSize[0], windowSize[1])
 view_rect = window_rect.copy()
@@ -91,7 +92,7 @@ def movement_update():
 	global player_rect
 	global view_rect
 	global scroll_buff
-	global speed
+	global ground_speed
 	global jump_speed
 	global on_ground
 	global player_move
@@ -100,11 +101,14 @@ def movement_update():
 	
 	view_move = [0,0]
 	movement = [0,0]
+	speed_value = ground_speed if on_ground else air_speed
 	
 	#determine if there is movement
 	movement[0] = keys[1] - keys[0]
+	
 	if on_ground == True: 
 		time_grounded += 1
+		player_move[0] = movement[0] * ground_speed
 		if keys[2] == 1 and keys[3] == 0 and time_grounded >= jump_delay:
 			player_move[1] = -jump_speed
 			movement[1] = -1
@@ -116,11 +120,10 @@ def movement_update():
 	else: #if in the air, accelerate down.
 		movement[1] = player_move[1] #Only the charge of movement matters, not the voltage.
 		time_grounded = 0 
+		player_move[0] = movement[0] * air_speed
 		if frame_number % fall_inertia == 0:
 			player_move[1] += 1 #accelerate towards ground at rate of 1/6th of a pixel per frame^2
-			
-	player_move[0] = movement[0] * speed
-		
+					
 	player_move = collision_detect(player_rect, player_move)
 
 	#moving left
@@ -165,7 +168,7 @@ def movement_update():
 	#moving down
 	if movement[1] > 0:
 		if (player_rect.bottom < background.get_height()):
-			if (background.get_height() - player_rect.bottom < speed):
+			if (background.get_height() - player_rect.bottom < speed_value):
 				player_move[1] = background.get_height() - player_rect.bottom
 				
 		#move the viewport		
@@ -225,7 +228,6 @@ def collision_detect(ent_rect, ent_move):
 				diff = (ent_bottom * tilesize) - ent_rect.bottom
 				if (ent_move[1] >= diff): 
 					ent_move[1] = diff
-					#on_ground = True
 	
 	return ent_move
 			
