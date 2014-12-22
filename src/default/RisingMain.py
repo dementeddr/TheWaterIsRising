@@ -62,6 +62,7 @@ def event_update():
 		#elif event.type == VIDEORESIZE:
 		#	window_sized = pygame.Rect(0,0, event.dict['w'], event.dict['h'])
 		#	screen = pygame.display.set_mode(event.dict['size'],HWSURFACE|DOUBLEBUF|RESIZABLE)
+		
 		#update keyboard presses
 		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_LEFT:
@@ -85,52 +86,6 @@ def event_update():
 				
 	frame_number += 1
 			
-			
-
-	
-
-"""
-"""	
-def collision_detect(ent_rect, ent_move):
-	
-	#global on_ground #This is bad and I should feel bad. Need to work around python's pass-by-name.
-	
-	ent_left = (ent_rect.left // tilesize) 
-	ent_right = math.ceil(ent_rect.right / tilesize)
-	ent_top = (ent_rect.top // tilesize)
-	ent_bottom = math.ceil(ent_rect.bottom / tilesize)
-	diff = 0
-	
-	#Left side collision
-	if ent_move[0] < 0:
-		for i in range(1 if ent_rect.top % tilesize == 0 else 2):
-			if (map.map[(ent_rect.left + ent_move[0]) // tilesize] [ent_top + i] [1] == False):
-				diff = (ent_left * tilesize) - ent_rect.left
-				if (ent_move[0] < diff): ent_move[0] = diff
-				
-	#Right side collision
-	if ent_move[0] > 0:
-		for i in range(1 if ent_rect.top % tilesize == 0 else 2):
-			if (map.map[(ent_rect.right + ent_move[0] -1) // tilesize] [ent_top + i] [1] == False):
-				diff = (ent_right * tilesize) - ent_rect.right
-				if (ent_move[0] > diff): ent_move[0] = diff
-				
-	#Top side collision
-	if ent_move[1] < 0:
-		for i in range(1 if ent_rect.left % tilesize == 0 else 2):
-			if (map.map[ent_left + i] [(ent_rect.top + ent_move[1]) // tilesize] [1] == False):
-				diff = (ent_top * tilesize) - ent_rect.top
-				if (ent_move[1] < diff): ent_move[1] = diff
-				
-	#Bottom side collision
-	if ent_move[1] > 0:
-		for i in range(1 if ent_rect.left % tilesize == 0 else 2):
-			if (map.map[ent_left + i] [(ent_rect.bottom + ent_move[1] -1) // tilesize] [1] == False):
-				diff = (ent_bottom * tilesize) - ent_rect.bottom
-				if (ent_move[1] >= diff): 
-					ent_move[1] = diff
-	
-	return ent_move
 			
 	
 """
