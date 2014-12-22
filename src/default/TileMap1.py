@@ -13,12 +13,6 @@ from pygame.locals import *
 """
 class TileMap1:
 	
-	map = []
-	mapWidth = 0
-	mapHeight = 0
-	drawWidth = 0
-	drawHeight = 0
-	
 	"""
 	"""
 	def __init__(self, tilesize, mapWidth, mapHeight):
@@ -27,6 +21,8 @@ class TileMap1:
 		
 		self.drawWidth = mapWidth * tilesize
 		self.drawHeight = mapHeight * tilesize
+		
+		self.map = []
 
 		floor1 = pygame.image.load("rect_gray0.png").convert()
 		floor2 = pygame.image.load("floor_vines0.png").convert()

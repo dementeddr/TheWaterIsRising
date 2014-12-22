@@ -7,52 +7,25 @@ Created on May 10, 2014
 import os, sys, math
 import pygame
 
+#This whole block of imports just... hurts. Get some packages up in here fool.
 from TileMap1 import *
 from TileMap2 import *
+from World import *
+from Entity import *
+from Player import *
+
 from pygame.locals import *
-
-windowSize = (640, 480)
-
-tilesize = 32
-scroll_buff = tilesize * 5
-on_ground = False
-ground_speed = 3
-air_speed = 2
-jump_speed = 8
-jump_delay = 3
-fall_inertia = 6
-
-keys = [0,0,0,0] #List/Array declaration
-black = (0,0,0) #Tuple declaration
 
 pygame.init()
 print("Initializing")
 
-screen = pygame.display.set_mode(windowSize, HWSURFACE|DOUBLEBUF) #|RESIZEABLE)
-clock = pygame.time.Clock()
-map = TileMap1(tilesize, 30, 24)
-
-window_rect = pygame.Rect(0, 0, windowSize[0], windowSize[1])
-view_rect = window_rect.copy()
-window_sized = window_rect.copy()
-background = pygame.Surface((map.mapWidth*tilesize, map.mapHeight*tilesize))
-
-player = pygame.image.load("human_m.png").convert()
-player_rect = pygame.Rect(200, 100, tilesize, tilesize) #Starting location
-player_move = [0,0]
-
-frame_number = 0
-time_grounded = 0
-
+window_size = (640, 480)
 
 """
 """
-def event_update():
-	global keys
-	global screen
-	global window_sized
-	global frame_number
-	
+def event_update(world):
+	#global window_sized
+		
 	#Update events
 	for event in pygame.event.get():
 		#On quit
@@ -66,25 +39,25 @@ def event_update():
 		#update keyboard presses
 		elif event.type == pygame.KEYDOWN:
 			if event.key == pygame.K_LEFT:
-				keys[0] = 1;
+				world.keys[0] = 1;
 			elif event.key == pygame.K_RIGHT:
-				keys[1] = 1;
+				world.keys[1] = 1;
 			elif event.key == pygame.K_UP:
-				keys[2] = 1;
+				world.keys[2] = 1;
 			elif event.key == pygame.K_DOWN:
-				keys[3] = 1;
+				world.keys[3] = 1;
 		#update keyboard releases
 		elif event.type == pygame.KEYUP:
 			if event.key == pygame.K_LEFT:
-				keys[0] = 0;
+				world.keys[0] = 0;
 			elif event.key == pygame.K_RIGHT:
-				keys[1] = 0;
+				world.keys[1] = 0;
 			elif event.key == pygame.K_UP:
-				keys[2] = 0;
+				world.keys[2] = 0;
 			elif event.key == pygame.K_DOWN:
-				keys[3] = 0;
+				world.keys[3] = 0;
 				
-	frame_number += 1
+	world.frame_number += 1
 			
 			
 	
@@ -92,18 +65,25 @@ def event_update():
 """
 if __name__ == '__main__':
 
-	for x in range(map.mapWidth):
-		for y in range(map.mapHeight):
-			tile = map.map[x][y][0]
-			background.blit(tile, (x*tilesize, y*tilesize))
+	screen = pygame.display.set_mode(window_size, HWSURFACE|DOUBLEBUF) #|RESIZEABLE)
+	clock = pygame.time.Clock()
+	black = (0,0,0) #Tuple declaration
+		
+	world = World(window_size)
+	player = Player(world)
+
+	for x in range(world.map.mapWidth):
+		for y in range(world.map.mapHeight):
+			tile = world.map.map[x][y][0]
+			world.background.blit(tile, (x*world.tilesize, y*world.tilesize))
 			
 	#bgx2 = pygame.Surface((map.drawWidth*2, map.drawHeight*2))
 	#pygame.transform.scale2x(background, bgx2)
 	
 	#THE ALMIGHTY GAME LOOP
 	while 1:		
-		event_update()
-		movement_update()
+		event_update(world)
+		player.movement_update(world)
 
 		#print("Resize width: ", window_sized.width)
 		#print("Resize height: ", window_sized.height)
@@ -117,11 +97,14 @@ if __name__ == '__main__':
 		#pygame.transform.scale(background, (bg_new_dim), bg_new)
 		
 		screen.fill(black)				
-		viewport = background.subsurface(view_rect)
-		screen.blit(viewport, window_rect)
+		viewport = world.background.subsurface(player.view_rect)
+		screen.blit(viewport, world.window_rect)
 		
 		#Here we draw the player to the screen, using fancy math.
-		screen.blit(player, pygame.Rect(player_rect.left - view_rect.left, player_rect.top - view_rect.top, tilesize, tilesize))
+		screen.blit(player.sprite, pygame.Rect(player.ent_rect.left - player.view_rect.left, 
+									player.ent_rect.top - player.view_rect.top,
+									 world.tilesize,
+									  world.tilesize))
 		pygame.display.flip() 
 		
 		clock.tick(80)
